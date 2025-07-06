@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FriendRent - Rejestracja</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffeef7 0%, #fff0f6 50%, #f0e6ff 100%);
+            min-height: 100vh;
+            color: #4a4a4a;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 30px rgba(255, 182, 193, 0.2);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid #ffb6c1;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ff69b4;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo::before {
+            content: "💕";
+            font-size: 24px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #666;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #ff69b4;
+        }
+
+        .nav-links a.active {
+            color: #ff69b4;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(45deg, #ff69b4, #ffc0cb);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .main-content {
+            padding: 120px 0 80px;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .hero-section h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero-section p {
+            font-size: 1.2em;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 105, 180, 0.3);
+        }
+
+        .registration-type-selector {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .type-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            box-shadow: 0 10px 30px rgba(255, 182, 193, 0.1);
+            min-width: 280px;
+            max-width: 350px;
+            flex: 1;
+        }
+
+        .type-card:hover {
+            transform: translateY(-5px);
+            border-color: #ffb6c1;
+            box-shadow: 0 15px 40px rgba(255, 182, 193, 0.2);
+        }
+
+        .type-card.active {
+            border-color: #ff69b4;
+            background: rgba(255, 105, 180, 0.1);
+        }
+
+        .type-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .type-card h3 {
+            font-size: 1.5em;
+            color: #ff69b4;
+            margin-bottom: 15px;
+        }
+
+        .type-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .registration-form {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(255, 182, 193, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+            display: none;
+        }
+
+        .registration-form.active {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ffeef7;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #ff69b4;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: #ffeef7;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-item:hover {
+            background: #ffb6c1;
+            color: white;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .photo-upload {
+            border: 2px dashed #ffb6c1;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #ffeef7;
+        }
+
+        .photo-upload:hover {
+            border-color: #ff69b4;
+            background: rgba(255, 105, 180, 0.1);
+        }
+
+        .photo-upload.dragover {
+            border-color: #ff1493;
+            background: rgba(255, 20, 147, 0.1);
+        }
+
+        .photo-preview {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 10px;
+            margin: 10px auto;
+            display: none;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 105, 180, 0.4);
+        }
+
+        .terms {
+            background: #ffeef7;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .terms input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-section h1 {
+                font-size: 2em;
+            }
+            
+            .registration-type-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .type-card {
+                max-width: none;
+                width: 100%;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo">FriendRent</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Start</a></li>
+                <li><a href="galeria.html">Galeria</a></li>
+                <li><a href="rejestracja.html" class="active">Rejestracja</a></li>
+                <li><a href="index.html#contact">Kontakt</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <a href="index.html" class="back-btn">← Powrót do strony głównej</a>
+            
+            <section class="hero-section">
+                <h1>Dołącz do FriendRent! 🌈</h1>
+                <p>Wybierz typ konta, który Ci odpowiada i zacznij swoją przygodę z nami! 💕</p>
+            </section>
+
+            <section class="registration-type-selector">
+                <div class="type-card" onclick="selectType('user')">
+                    <span class="type-icon">🙋‍♀️</span>
+                    <h3>Szukam Przyjaciela</h3>
+                    <p>Chcę znaleźć kogoś, kto będzie moim towarzyszem na różne okazje. Potrzebuję przyjaciela na imprezę, randkę lub po prostu do spędzenia miłego czasu!</p>
+                </div>
+                <div class="type-card" onclick="selectType('friend')">
+                    <span class="type-icon">💫</span>
+                    <h3>Chcę być Przyjacielem</h3>
+                    <p>Jestem osobą otwartą, lubię poznawać nowych ludzi i chcę zarabiać pomagając innym. Oferuję swoje towarzystwo i usługi!</p>
+                </div>
+            </section>
+
+            <!-- User Registration Form -->
+            <form id="userForm" class="registration-form">
+                <h2 style="text-align: center; color: #ff69b4; margin-bottom: 30px;">Rejestracja Użytkownika 🙋‍♀️</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="userFirstName">Imię *</label>
+                        <input type="text" id="userFirstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userLastName">Nazwisko *</label>
+                        <input type="text" id="userLastName" name="lastName" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="userEmail">Email *</label>
+                        <input type="email" id="userEmail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userPhone">Telefon *</label>
+                        <input type="tel" id="userPhone" name="phone" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="userAge">Wiek *</label>
+                        <input type="number" id="userAge" name="age" min="18" max="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userCity">Miasto *</label>
+                        <select id="userCity" name="city" required>
+                            <option value="">Wybierz miasto</option>
+                            <option value="warszawa">Warszawa</option>
+                            <option value="krakow">Kraków</option>
+                            <option value="wroclaw">Wrocław</option>
+                            <option value="gdansk">Gdańsk</option>
+                            <option value="poznan">Poznań</option>
+                            <option value="lublin">Lublin</option>
+                            <option value="inne">Inne</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="userPassword">Hasło *</label>
+                    <input type="password" id="userPassword" name="password" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Jakich przyjaciół szukasz? 🤔</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="user_party" name="preferences" value="party">
+                            <label for="user_party">🎉 Na imprezy</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="user_coffee" name="preferences" value="coffee">
+                            <label for="user_coffee">☕ Do kawy</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="user_fake" name="preferences" value="fake">
+                            <label for="user_fake">💕 Fałszywa para</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="user_adventure" name="preferences" value="adventure">
+                            <label for="user_adventure">🎨 Przygody</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="user_workout" name="preferences" value="workout">
+                            <label for="user_workout">🏃‍♀️ Fitness</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="user_guide" name="preferences" value="guide">
+                            <label for="user_guide">🌍 Przewodnik</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="terms">
+                    <label>
+                        <input type="checkbox" required>
+                        Akceptuję <a href="#" style="color: #ff69b4;">regulamin</a> i <a href="#" style="color: #ff69b4;">politykę prywatności</a> 📋
+                    </label>
+                </div>
+
+                <button type="submit" class="submit-btn">Załóż konto użytkownika! 🎉</button>
+            </form>
+
+            <!-- Friend Registration Form -->
+            <form id="friendForm" class="registration-form">
+                <h2 style="text-align: center; color: #ff69b4; margin-bottom: 30px;">Rejestracja Przyjaciela 💫</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="friendFirstName">Imię *</label>
+                        <input type="text" id="friendFirstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="friendLastName">Nazwisko *</label>
+                        <input type="text" id="friendLastName" name="lastName" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="friendEmail">Email *</label>
+                        <input type="email" id="friendEmail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="friendPhone">Telefon *</label>
+                        <input type="tel" id="friendPhone" name="phone" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="friendAge">Wiek *</label>
+                        <input type="number" id="friendAge" name="age" min="18" max="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="friendGender">Płeć *</label>
+                        <select id="friendGender" name="gender" required>
+                            <option value="">Wybierz płeć</option>
+                            <option value="kobieta">Kobieta</option>
+                            <option value="mężczyzna">Mężczyzna</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="friendCity">Miasto *</label>
+                    <select id="friendCity" name="city" required>
+                        <option value="">Wybierz miasto</option>
+                        <option value="warszawa">Warszawa</option>
+                        <option value="krakow">Kraków</option>
+                        <option value="wroclaw">Wrocław</option>
+                        <option value="gdansk">Gdańsk</option>
+                        <option value="poznan">Poznań</option>
+                        <option value="lublin">Lublin</option>
+                        <option value="inne">Inne</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="friendPassword">Hasło *</label>
+                    <input type="password" id="friendPassword" name="password" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Twoje zdjęcie profilowe 📸</label>
+                    <div class="photo-upload" onclick="document.getElementById('photoInput').click()">
+                        <p>📷 Kliknij lub przeciągnij zdjęcie tutaj</p>
+                        <p style="font-size: 0.9em; color: #888; margin-top: 10px;">Dozwolone formaty: JPG, PNG (max 5MB)</p>
+                        <img id="photoPreview" class="photo-preview" alt="Podgląd zdjęcia">
+                    </div>
+                    <input type="file" id="photoInput" accept="image/*" style="display: none;">
+                </div>
+
+                <div class="form-group">
+                    <label>Jakie usługi oferujesz? 🌟</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="friend_party" name="services" value="party">
+                            <label for="friend_party">🎉 Przyjaciel na imprezy</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="friend_coffee" name="services" value="coffee">
+                            <label for="friend_coffee">☕ Kawa i pogadanki</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="friend_fake" name="services" value="fake">
+                            <label for="friend_fake">💕 Fałszywa dziewczyna/chłopak</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="friend_adventure" name="services" value="adventure">
+                            <label for="friend_adventure">🎨 Towarzysz przygód</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="friend_workout" name="services" value="workout">
+                            <label for="friend_workout">🏃‍♀️ Workout buddy</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="friend_guide" name="services" value="guide">
+                            <label for="friend_guide">🌍 Lokalny przewodnik</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="friendPriceMin">Cena minimalna (zł/h) 💰</label>
+                        <input type="number" id="friendPriceMin" name="priceMin" min="50" max="1000" placeholder="120">
+                    </div>
+                    <div class="form-group">
+                        <label for="friendPriceMax">Cena maksymalna (zł/h) 💰</label>
+                        <input type="number" id="friendPriceMax" name="priceMax" min="50" max="1000" placeholder="300">
+                    </div>
+                </div>
+
+                <div class="terms">
+                    <label>
+                        <input type="checkbox" required>
+                        Akceptuję <a href="#" style="color: #ff69b4;">regulamin</a>, <a href="#" style="color: #ff69b4;">politykę prywatności</a> i <a href="#" style="color: #ff69b4;">warunki świadczenia usług</a> 📋
+                    </label>
+                </div>
+
+                <div class="terms">
+                    <label>
+                        <input type="checkbox" required>
+                        Potwierdzam, że mam ukończone 18 lat i zgadzam się na weryfikację tożsamości 🆔
+                    </label>
+                </div>
+
+                <button type="submit" class="submit-btn">Zostań przyjacielem FriendRent! 💫</button>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        let selectedType = null;
+
+        function selectType(type) {
+            selectedType = type;
+            
+            // Update visual selection
+            document.querySelectorAll('.type-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // Hide all forms
+            document.querySelectorAll('.registration-form').forEach(form => {
+                form.classList.remove('active');
+            });
+            
+            // Show selected form
+            setTimeout(() => {
+                if (type === 'user') {
+                    document.getElementById('userForm').classList.add('active');
+                } else if (type === 'friend') {
+                    document.getElementById('friendForm').classList.add('active');
+                }
+            }, 300);
+        }
+
+        // Photo upload functionality
+        const photoInput = document.getElementById('photoInput');
+        const photoUpload = document.querySelector('.photo-upload');
+        const photoPreview = document.getElementById('photoPreview');
+
+        photoInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    photoPreview.src = e.target.result;
+                    photoPreview.style.display = 'block';
+                    photoUpload.querySelector('p').style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Drag and drop functionality
+        photoUpload.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+
+        photoUpload.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+        });
+
+        photoUpload.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                photoInput.files = files;
+                const event = new Event('change');
+                photoInput.dispatchEvent(event);
+            }
+        });
+
+        // Form submissions
+        document.getElementById('userForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect form data
+            const formData = new FormData(this);
+            const preferences = [];
+            document.querySelectorAll('input[name="preferences"]:checked').forEach(checkbox => {
+                preferences.push(checkbox.value);
+            });
+            
+            // Simulate registration
+            alert(`Dziękujemy za rejestrację! 🎉\n\nWitaj w FriendRent jako użytkownik!\n\nNa Twój email zostanie wysłany link aktywacyjny.\n\nPreferencje: ${preferences.join(', ') || 'Brak wybranych'}`);
+            
+            // Reset form
+            this.reset();
+            document.querySelectorAll('.type-card').forEach(card => card.classList.remove('active'));
+            this.classList.remove('active');
+        });
+
+        document.getElementById('friendForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Check if at least one service is selected
+            const services = [];
+            document.querySelectorAll('input[name="services"]:checked').forEach(checkbox => {
+                services.push(checkbox.value);
+            });
+            
+            if (services.length === 0) {
+                alert('Wybierz przynajmniej jedną usługę, którą chcesz oferować! 😊');
+                return;
+            }
+            
+            // Check if photo is uploaded
+            if (!photoInput.files.length) {
+                alert('Dodaj swoje zdjęcie profilowe! 📸');
+                return;
+            }
+            
+            // Collect form data
+            const formData = new FormData(this);
+            
+            // Simulate registration
+            alert(`Dziękujemy za rejestrację! 💫\n\nTwoja aplikacja jako przyjaciel została wysłana!\n\nUsługi: ${services.join(', ')}\n\nTwój profil zostanie zweryfikowany w ciągu 24-48 godzin.\nOtrzymasz email z dalszymi instrukcjami.`);
+            
+            // Reset form
+            this.reset();
+            photoPreview.style.display = 'none';
+            photoUpload.querySelector('p').style.display = 'block';
+            document.querySelectorAll('.type-card').forEach(card => card.classList.remove('active'));
+            this.classList.remove('active');
+        });
+
+        // Price validation
+        document.getElementById('friendPriceMin').addEventListener('change', function() {
+            const maxInput = document.getElementById('friendPriceMax');
+            if (maxInput.value && parseInt(this.value) >= parseInt(maxInput.value)) {
+                maxInput.value = parseInt(this.value) + 50;
+            }
+        });
+
+        document.getElementById('friendPriceMax').addEventListener('change', function() {
+            const minInput = document.getElementById('friendPriceMin');
+            if (minInput.value && parseInt(this.value) <= parseInt(minInput.value)) {
+                minInput.value = parseInt(this.value) - 50;
+            }
+        });
+
+        // Smooth animations for checkbox interactions
+        document.querySelectorAll('.checkbox-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const checkbox = this.querySelector('input[type="checkbox"]');
+                if (!checkbox.disabled) {
+                    checkbox.checked = !checkbox.checked;
+                    this.style.background = checkbox.checked ? '#ff69b4' : '#ffeef7';
+                    this.style.color = checkbox.checked ? 'white' : '#4a4a4a';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
